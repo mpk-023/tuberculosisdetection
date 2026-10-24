@@ -44,9 +44,13 @@ python -m uvicorn backend.app:app --host 127.0.0.1 --port 8000
 The default device is CPU. Set `MODEL_DEVICE` to `cuda:0` only when this
 environment has a compatible CUDA-enabled PyTorch/MMCV installation.
 
-Open `http://127.0.0.1:8000/` for the browser demo, or
-`http://127.0.0.1:8000/docs` for the API documentation. The page uploads a
-selected image to the local backend and draws returned boxes and scores.
+Open `http://127.0.0.1:8000/` for the browser prototype, or
+`http://127.0.0.1:8000/docs` for the inference API documentation. The browser
+interface uses mock-only OTP, patient records, triage labels, scores,
+observations, and heatmap illustrations; it does not call the trained model.
+It stores demo records in browser local storage, not a secure clinical record
+system. The separate `POST /predict` endpoint runs the experimental detector
+and returns candidate boxes; it is not a validated triage service.
 `GET /health` checks whether the config and checkpoint paths exist.
 `POST /predict` accepts one image as multipart form field `file` and returns
 original-image pixel coordinates, scores, and the `TB` label. The current preview-oriented defaults retain
@@ -60,6 +64,10 @@ For a temporary public demo link using a compatible Colab GPU runtime, open
 in Colab and run the cells in order. Keep the notebook runtime running while
 the link is in use. The tunnel is temporary and unauthenticated; do not upload
 patient-identifiable or confidential images.
+
+After frontend changes are pushed, interrupt the current tunnel cell, run the
+notebook's **Refresh an already-running temporary demo** cell, then run the
+tunnel cell again. A restarted quick tunnel may issue a different URL.
 
 The checkpoint's validation performance was low (mAP 2.43%, AP@0.50 7.55% in
 the reported one-class validation sweep). Predictions must not be used to
