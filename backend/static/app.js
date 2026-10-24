@@ -82,8 +82,8 @@
         </a>
         <div class="top-actions">${options.login ? languageSelect() : `<span class="hint">${worker ? esc(worker.name) : ""}</span>${settingsButton}`}</div>
       </header>
-      <div class="decision-note" role="note">ⓘ ${esc(tr("note"))}</div>
       ${content}
+      <footer class="decision-note" role="note">${esc(tr("note"))}</footer>
       ${settingsOpen ? settingsDrawer() : ""}
       ${modalHtml ? `<div class="modal" id="modal-root" role="presentation"><section class="card modal-card" role="dialog" aria-modal="true" aria-label="${esc(tr("dialog"))}">${modalHtml}</section></div>` : ""}
     </div>`;
