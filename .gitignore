@@ -1,0 +1,7 @@
+backend/epoch_2.pth
+**/__pycache__/
+**/*.py[cod]
+.venv/
+venv/
+*.log
+.pytest_cache/
