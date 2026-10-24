@@ -88,9 +88,6 @@
       ${modalHtml ? `<div class="modal" id="modal-root" role="presentation"><section class="card modal-card" role="dialog" aria-modal="true" aria-label="${esc(tr("dialog"))}">${modalHtml}</section></div>` : ""}
     </div>`;
   }
-  function demoNotice(extra = "") {
-    return `<div class="notice demo" role="note"><strong>${esc(tr("demoBanner"))}.</strong> ${esc(tr("demoDescription"))}${extra ? ` ${extra}` : ""}</div>`;
-  }
   function settingsDrawer() {
     return `<div class="settings-backdrop" id="settings-backdrop"></div><aside class="settings-panel" aria-label="${esc(tr("settings"))}">
       <div class="page-header"><h2>${esc(tr("settings"))}</h2><button id="settings-close" class="icon-button" aria-label="${esc(tr("cancel"))}">✕</button></div>
@@ -101,7 +98,6 @@
   }
   function loginPage() {
     const content = `<main class="container" style="max-width:620px">
-      ${demoNotice()}
       <section class="card">
         <div class="page-header"><div><h1>${esc(tr("login"))}</h1><p>${esc(tr("loginIntro"))}</p></div></div>
         <form id="login-form" novalidate>
@@ -126,7 +122,6 @@
   function dashboardPage() {
     const worker = session();
     const content = `<main class="container">
-      ${demoNotice()}
       <div class="page-header"><div><h1>${esc(tr("welcome"))}, ${esc(worker?.name || "")}</h1><p>${esc(tr("dashboardIntro"))}</p></div></div>
       <section class="grid dashboard-grid" aria-label="${esc(tr("dashboard"))}">
         <button class="card action-card" data-route="/patients/new"><span class="action-icon" aria-hidden="true">＋</span><span><strong>${esc(tr("addPatient"))}</strong><small>${esc(tr("addCardDescription"))}</small></span></button>
@@ -159,7 +154,7 @@
   function wizardPage() {
     const content = `<main class="container">
       <div class="page-header"><div><h1>${esc(tr("addPatient"))}</h1><p>${esc(tr("localOnly"))}</p></div><button class="btn btn-quiet" data-route="/dashboard">${esc(tr("back"))}</button></div>
-      ${demoNotice()}${progress()}
+      ${progress()}
       <section class="card">
         ${wizardStep===1 ? `<h2>${esc(tr("patientDetails"))}</h2><div class="field-grid">
           ${field("name",tr("fullName"),wizardDraft.name,"text",true,'autocomplete="name"')}
@@ -178,7 +173,7 @@
   }
   function questionnairePage() {
     const content = `<main class="container">    <div class="page-header"><div><h1>${esc(tr("questionnaire"))}</h1><p>${esc(tr("questionnaireIntro"))}</p></div><button class="btn btn-quiet" data-route="/dashboard">${esc(tr("back"))}</button></div>
-      ${demoNotice()}<section class="card"><div class="page-header"><h2>${esc(tr("questionsTitle"))}</h2><button class="btn btn-primary" id="question-add">${esc(tr("addQuestion"))}</button></div>
+      <section class="card"><div class="page-header"><h2>${esc(tr("questionsTitle"))}</h2><button class="btn btn-primary" id="question-add">${esc(tr("addQuestion"))}</button></div>
       ${questions().map((q,index)=>`<div class="question-editor"><div><strong>${esc(q.textKey?tr(q.textKey):q.text)}</strong><div class="hint">${esc(q.type==="yesno"?tr("yesNo"):q.type==="number"?tr("number"):q.type==="choice"?tr("singleChoice"):tr("shortText"))}${q.type==="choice"&&q.options?.length?` · ${esc(q.options.join(", "))}`:""}</div></div>
       <div class="btn-row" style="margin:0"><button class="btn btn-quiet" data-question-edit="${esc(q.id)}">${esc(tr("edit"))}</button><button class="btn btn-quiet" data-question-up="${index}" aria-label="${esc(tr("moveUp"))}" ${index===0?"disabled":""}>↑</button><button class="btn btn-quiet" data-question-down="${index}" aria-label="${esc(tr("moveDown"))}" ${index===questions().length-1?"disabled":""}>↓</button><button class="btn btn-danger" data-question-delete="${esc(q.id)}">${esc(tr("delete"))}</button></div></div>`).join("")}
       <p id="question-saved" class="hint" role="status"></p></section></main>`;
@@ -197,7 +192,7 @@
   function patientListPage() {
     const all = patients();
     const content = `<main class="container"><div class="page-header"><div><h1>${esc(tr("patientList"))}</h1><p>${esc(tr("localOnly"))}</p></div><button class="btn btn-primary" data-route="/patients/new">${esc(tr("addPatient"))}</button></div>
-    ${demoNotice()}<section class="toolbar no-print"><input id="patient-search" class="search-input" type="search" placeholder="${esc(tr("search"))}" aria-label="${esc(tr("search"))}"><select id="triage-filter" class="filter-select" aria-label="${esc(tr("allResults"))}"><option value="">${esc(tr("allResults"))}</option>${["High","Medium","Low","Pending"].map(x=>`<option value="${x}">${esc(({High:tr("high"),Medium:tr("medium"),Low:tr("low"),Pending:tr("pending")})[x])}</option>`).join("")}</select><select id="date-filter" class="filter-select" aria-label="${esc(tr("allDates"))}"><option value="">${esc(tr("allDates"))}</option>${[...new Set(all.map(p=>p.date||today))].sort().reverse().map(d=>`<option>${esc(d)}</option>`).join("")}</select></section>
+    <section class="toolbar no-print"><input id="patient-search" class="search-input" type="search" placeholder="${esc(tr("search"))}" aria-label="${esc(tr("search"))}"><select id="triage-filter" class="filter-select" aria-label="${esc(tr("allResults"))}"><option value="">${esc(tr("allResults"))}</option>${["High","Medium","Low","Pending"].map(x=>`<option value="${x}">${esc(({High:tr("high"),Medium:tr("medium"),Low:tr("low"),Pending:tr("pending")})[x])}</option>`).join("")}</select><select id="date-filter" class="filter-select" aria-label="${esc(tr("allDates"))}"><option value="">${esc(tr("allDates"))}</option>${[...new Set(all.map(p=>p.date||today))].sort().reverse().map(d=>`<option>${esc(d)}</option>`).join("")}</select></section>
       <section class="patient-list" id="patient-list" aria-live="polite">${all.length?all.map(patientCard).join(""):`<div class="card empty-state">${esc(tr("emptyPatients"))}</div>`}</section></main>`;
     $("#app").innerHTML = shell(content);
   }
@@ -211,7 +206,6 @@
     const patientName = patient.name;
     const workerName = session()?.name || "Demo worker";
     return `<main class="container"><div class="page-header"><div><h1>${esc(tr("report"))}</h1><p>${esc(tr("localOnly"))}</p></div><button class="btn btn-quiet" data-route="/patients">${esc(tr("back"))}</button></div>
-      ${demoNotice(`<strong>${esc(tr("mockOnly"))}.</strong>`)}
       <div class="report-stack">
         <section class="card report-card"><h2>1. ${esc(patientName)}</h2><div class="hint">${esc(patient.age)} · ${esc(patient.date||today)} · ${esc(workerName)}</div></section>
         <section class="card report-card"><h2>2. ${esc(tr("triage"))}</h2><div class="triage-result">${badge(report.label||patient.triage||"Pending")}<strong>${esc(({High:tr("high"),Medium:tr("medium"),Low:tr("low"),Pending:tr("pending")})[report.label||patient.triage]||report.label||patient.triage)} — ${esc(tr("illustrativeSample"))}</strong></div><p><strong>${esc(tr("confidence"))}: ${esc(report.confidence??72)}%</strong></p><div class="meter ${(report.label||"").toLowerCase()}"><span style="width:${Math.min(100,Math.max(0,Number(report.confidence)||0))}%"></span></div><p class="hint">${esc(tr("recommendation"))}</p></section>
@@ -220,7 +214,6 @@
         <section class="card report-card"><h2>5. ${esc(tr("summary"))}</h2>${answerPairs.length?answerPairs.map(([key,value])=>`<div class="observation"><span>${esc(questionLabel(key))}</span><span class="${value==="Yes"?"risk-answer":""}">${esc(answerLabel(value))}</span></div>`).join(""):`<p class="hint">${esc(tr("noAnswer"))}</p>`}</section>
         <section class="card report-card"><h2>6. ${esc(tr("why"))}</h2><p>${esc(report.explanation||tr("exampleExplanation"))}</p><p class="small-print">${esc(tr("noClinicalFinding"))}</p></section>
         <section class="card report-card"><h2>7. ${esc(tr("nextSteps"))}</h2><div class="checklist"><label><input type="checkbox"><span>${esc(tr("confirmatory"))}</span></label><label><input type="checkbox"><span>${esc(tr("advise"))}</span></label><label><input type="checkbox"><span>${esc(tr("followup"))}</span></label></div><div class="btn-row no-print"><button class="btn btn-secondary" id="referral-note">${esc(tr("referral"))}</button><button class="btn btn-quiet" id="share-note">${esc(tr("share"))}</button><button class="btn btn-quiet" id="save-record">${esc(tr("saveRecord"))}</button><button class="btn btn-primary" id="print-report">${esc(tr("print"))}</button></div></section>
-        <section class="card report-card"><h2>8. ${esc(tr("disclaimer"))}</h2><p class="small-print">${esc(tr("localOnly"))}</p></section>
       </div></main>`;
   }
   function questionLabel(id) {

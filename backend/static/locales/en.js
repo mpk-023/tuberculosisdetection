@@ -13,7 +13,7 @@
     questionnaireCardDescription: "Manage questions for future demo records.",
     patientListCardDescription: "Browse local sample records.",
     demoDescription: "Sample records and all analysis results are mock data. This prototype does not make clinical predictions.",
-    note: "Decision-support tool. Not a final diagnosis.", back: "Back", next: "Next",
+    note: "Mock demo only — not for diagnosis or treatment.", back: "Back", next: "Next",
     save: "Save", cancel: "Cancel", delete: "Delete", edit: "Edit", addQuestion: "Add question",
     saved: "Saved on this device.", patientDetails: "Patient details", patientPhoto: "Patient photo (optional)",
     sex: "Sex", village: "Village / address", patientId: "Patient ID (optional)",
