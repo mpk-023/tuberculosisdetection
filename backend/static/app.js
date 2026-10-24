@@ -33,7 +33,15 @@
     { id:"contact", textKey:"tbContact", type:"yesno" },
     { id:"treatment", textKey:"previousTreatment", type:"yesno" },
   ];
-  let route = location.pathname;
+  const basePath = String(window.TBTABasePath || "").replace(/\/$/, "");
+  const routeFromLocation = () => {
+    const pathname = location.pathname;
+    return basePath && pathname.startsWith(basePath)
+      ? pathname.slice(basePath.length) || "/"
+      : pathname;
+  };
+  const routeUrl = path => `${basePath}${path === "/" ? "/" : path}`;
+  let route = routeFromLocation();
   let otpSent = false;
   let resendSeconds = 0;
   let resendTimer = null;
@@ -52,13 +60,13 @@
     return saved === null ? samplePatients : saved;
   }
   function navigate(path) {
-    history.pushState({}, "", path);
+    history.pushState({}, "", routeUrl(path));
     route = path;
     settingsOpen = false;
     modalHtml = "";
     render();
   }
-  window.addEventListener("popstate", () => { route = location.pathname; render(); });
+  window.addEventListener("popstate", () => { route = routeFromLocation(); render(); });
   function languageSelect(className = "language-top") {
     const selected = localStorage.getItem(STORAGE.language) || "en";
     return `<label class="sr-only" for="language-select">${tr("language")}</label><select id="language-select" class="${className}" aria-label="${esc(tr("language"))}">${languages.map(([code,name]) => `<option value="${code}" ${selected===code?"selected":""}>${esc(name)}</option>`).join("")}</select>`;
@@ -68,7 +76,7 @@
     const settingsButton = options.login ? "" : `<button class="icon-button" id="settings-open" type="button" aria-label="${esc(tr("settings"))}" title="${esc(tr("settings"))}">⚙ <span class="sr-only">${esc(tr("settings"))}</span></button>`;
     return `<div class="app-shell">
       <header class="topbar">
-        <a class="brand" href="/dashboard" data-route="/dashboard"><span class="brand-mark" aria-hidden="true">＋</span><span>TB Triage Assistant</span></a>
+        <a class="brand" href="${esc(routeUrl("/dashboard"))}" data-route="/dashboard"><span class="brand-mark" aria-hidden="true">＋</span><span>TB Triage Assistant</span></a>
         <div class="top-actions">${options.login ? languageSelect() : `<span class="hint">${worker ? esc(worker.name) : ""}</span>${settingsButton}`}</div>
       </header>
       <div class="decision-note" role="note">ⓘ ${esc(tr("note"))}</div>
@@ -230,11 +238,11 @@
   }
   function render() {
     document.documentElement.lang = localStorage.getItem(STORAGE.language) || "en";
-    const path = location.pathname;
+    const path = routeFromLocation();
     route = path;
     if (path === "/login" || !session()) {
-      if (session()) { history.replaceState({}, "", "/dashboard"); route="/dashboard"; dashboardPage(); bindEvents(); return; }
-      if (path !== "/login") history.replaceState({}, "", "/login");
+      if (session()) { history.replaceState({}, "", routeUrl("/dashboard")); route="/dashboard"; dashboardPage(); bindEvents(); return; }
+      if (path !== "/login") history.replaceState({}, "", routeUrl("/login"));
       route="/login"; loginPage(); bindEvents(); return;
     }
     if (path === "/dashboard" || path === "/") { dashboardPage(); bindEvents(); return; }
@@ -243,7 +251,7 @@
     if (path === "/patients") { patientListPage(); bindEvents(); return; }
     const match = path.match(/^\/patients\/([^/]+)\/report$/);
     if (match) { currentPatientId = decodeURIComponent(match[1]); $("#app").innerHTML = shell(reportPage(loadPatient(currentPatientId))); bindEvents(); return; }
-    history.replaceState({}, "", "/dashboard"); dashboardPage(); bindEvents();
+    history.replaceState({}, "", routeUrl("/dashboard")); dashboardPage(); bindEvents();
   }
   function startResendTimer() {
     if (resendTimer) clearInterval(resendTimer);

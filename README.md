@@ -26,6 +26,10 @@ mean an image is healthy.
 
 ## Temporary public demo
 
+The mock-only triage frontend is also published as a static GitHub Pages site:
+<https://mpk-023.github.io/tuberculosisdetection/>. It does not require the
+Colab runtime, but it does not connect to the experimental model API.
+
 [![Open the public-demo Colab notebook](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mpk-023/tuberculosisdetection/blob/main/notebooks/run_public_demo_colab.ipynb)
 
 Open the notebook, choose a GPU runtime, then run its cells from top to
