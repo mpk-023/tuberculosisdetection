@@ -76,7 +76,10 @@
     const settingsButton = options.login ? "" : `<button class="icon-button" id="settings-open" type="button" aria-label="${esc(tr("settings"))}" title="${esc(tr("settings"))}">⚙ <span class="sr-only">${esc(tr("settings"))}</span></button>`;
     return `<div class="app-shell">
       <header class="topbar">
-        <a class="brand" href="${esc(routeUrl("/dashboard"))}" data-route="/dashboard"><span class="brand-mark" aria-hidden="true">＋</span><span>TB Triage Assistant</span></a>
+        <a class="brand" href="${esc(routeUrl("/dashboard"))}" data-route="/dashboard" aria-label="Alveo — Assisted Lung Visualization and Explainable Outcomes">
+          <img class="brand-logo" src="${esc(basePath)}/static/alveo-logo.png" alt="">
+          <span class="brand-copy"><strong>Alveo</strong><small>Assisted Lung Visualization and Explainable Outcomes</small></span>
+        </a>
         <div class="top-actions">${options.login ? languageSelect() : `<span class="hint">${worker ? esc(worker.name) : ""}</span>${settingsButton}`}</div>
       </header>
       <div class="decision-note" role="note">ⓘ ${esc(tr("note"))}</div>
@@ -488,7 +491,7 @@
       render();$("#referral-print")?.addEventListener("click",()=>window.print());
     });
     $("#share-note")?.addEventListener("click",()=>{
-      const text=encodeURIComponent("TB Triage Assistant demo: illustrative mock interface only. Please do not use this as a diagnosis.");
+      const text=encodeURIComponent("Alveo demo: illustrative mock interface only. Please do not use this as a diagnosis.");
       window.open(`https://wa.me/?text=${text}`,"_blank","noopener,noreferrer");
     });
   }
