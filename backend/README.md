@@ -55,6 +55,12 @@ These settings reduce visual clutter; they do not improve model accuracy.
 They can be changed with `SCORE_THRESHOLD`, `NMS_IOU_THRESHOLD`, and
 `MAX_DETECTIONS`.
 
+For a temporary public demo link using a compatible Colab GPU runtime, open
+[`notebooks/run_public_demo_colab.ipynb`](../notebooks/run_public_demo_colab.ipynb)
+in Colab and run the cells in order. Keep the notebook runtime running while
+the link is in use. The tunnel is temporary and unauthenticated; do not upload
+patient-identifiable or confidential images.
+
 The checkpoint's validation performance was low (mAP 2.43%, AP@0.50 7.55% in
 the reported one-class validation sweep). Predictions must not be used to
 diagnose, screen, or guide treatment.

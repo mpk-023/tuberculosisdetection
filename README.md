@@ -19,19 +19,19 @@ mean an image is healthy.
   CC BY-NC-SA 4.0; the source is for non-commercial use only.
 - The trained checkpoint and datasets are intentionally not included.
 
-## Run the demo
+## Temporary public demo
 
-The model uses a legacy stack. Set up the Python 3.8, PyTorch 1.9,
-torchvision 0.10, and MMCV-full 1.3.12 environment described in
-`backend/README.md` before installing the API requirements.
+[![Open the public-demo Colab notebook](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mpk-023/tuberculosisdetection/blob/main/notebooks/run_public_demo_colab.ipynb)
 
-Place the matching one-class `epoch_2.pth` checkpoint next to
-`backend/app.py`, then from this project root run:
+Open the notebook, choose a GPU runtime, then run its cells from top to
+bottom. It installs the compatible legacy inference stack, mounts Google
+Drive to read the checkpoint at
+`MyDrive/tb-colab/symformer_oneclass_full_2ep/epoch_2.pth`, starts the API,
+and opens a temporary public URL through Cloudflare Tunnel. The checkpoint
+must be placed in that Drive folder first; it is not included in GitHub.
 
-```powershell
-python -m pip install -r backend\requirements.txt
-python -m uvicorn backend.app:app --host 127.0.0.1 --port 8000
-```
-
-Open <http://127.0.0.1:8000/> in a browser. See `backend/README.md` for
-configuration, API details, and model limitations.
+The public link works only while the Colab runtime and tunnel remain running.
+It is temporary, unauthenticated, and intended for a research demo only.
+Anyone with the URL can reach the upload page; do not upload patient-identifiable
+or confidential images. For local setup, API configuration, and limitations,
+see `backend/README.md`.
